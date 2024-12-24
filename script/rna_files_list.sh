@@ -60,7 +60,7 @@ curl -kL "https://www.rna.gov.it/open-data/aiuti" | scrape -be '//a[@data-nid]' 
 
 mlr -I --jsonl cut -x -f span then rename -r "@","" then rename -g -r "[-]","_" then filter '${data_file_ext}=="zip"' then uniq -a "${folder}"/tmp/aiuti.jsonl
 
-cp "${folder}"/tmp/aiuti.jsonl "${folder}"/../data/misure/aiuti.jsonl
+cp "${folder}"/tmp/aiuti.jsonl "${folder}"/../data/aiuti/aiuti.jsonl
 
 ## estrai elenco URL
 
