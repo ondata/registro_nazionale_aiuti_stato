@@ -7,20 +7,25 @@ import os
 def main():
     # Parse command line arguments
     parser = argparse.ArgumentParser(description='Convert XML aiuti file to Parquet')
-    parser.add_argument('input_file', help='Input XML file path')
+    parser.add_argument('-i', '--input', required=True, help='Input XML file path')
+    parser.add_argument('-of', '--output-folder', help='Output folder for parquet files (optional)')
     args = parser.parse_args()
 
     # Normalizza il path e verifica esistenza file
-    input_path = os.path.abspath(args.input_file)
+    input_path = os.path.abspath(args.input)
     if not os.path.exists(input_path):
         print(f"Error: File {input_path} not found")
         sys.exit(1)
 
-    # Genera i nomi file di output nella stessa directory del file di input
-    output_dir = os.path.dirname(input_path)
-    base_name = os.path.splitext(os.path.basename(input_path))[0]
+    # Determina cartella output
+    output_dir = args.output_folder if args.output_folder else os.path.dirname(input_path)
+    output_dir = os.path.abspath(output_dir)
 
-    # Percorsi completi per i file Parquet
+    # Crea cartella output se non esiste
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Genera nomi file output
+    base_name = os.path.splitext(os.path.basename(input_path))[0]
     aiuti_parquet = os.path.join(output_dir, f"{base_name}_aiuti.parquet")
     componenti_parquet = os.path.join(output_dir, f"{base_name}_componenti.parquet")
     strumenti_parquet = os.path.join(output_dir, f"{base_name}_strumenti.parquet")
@@ -63,10 +68,21 @@ def main():
                 strumento["ID_COMPONENTE"] = componente.get("ID_COMPONENTE")
                 strumenti_records.append(strumento)
 
-    # Converti liste in DataFrame Polars con processing parallelo
-    df_aiuti = pl.DataFrame(aiuto_records).with_columns(pl.all().cast(pl.Utf8))
-    df_componenti = pl.DataFrame(componenti_records).with_columns(pl.all().cast(pl.Utf8))
-    df_strumenti = pl.DataFrame(strumenti_records).with_columns(pl.all().cast(pl.Utf8))
+    # Estrai nome file senza estensione per campo source
+    source_name = os.path.splitext(os.path.basename(input_path))[0]
+
+    # Converti liste in DataFrame Polars con processing parallelo e aggiungi source
+    df_aiuti = (pl.DataFrame(aiuto_records)
+                .with_columns(pl.all().cast(pl.Utf8))
+                .with_columns(pl.lit(source_name).alias("source")))
+
+    df_componenti = (pl.DataFrame(componenti_records)
+                    .with_columns(pl.all().cast(pl.Utf8))
+                    .with_columns(pl.lit(source_name).alias("source")))
+
+    df_strumenti = (pl.DataFrame(strumenti_records)
+                   .with_columns(pl.all().cast(pl.Utf8))
+                   .with_columns(pl.lit(source_name).alias("source")))
 
     # Salva in Parquet con compressione ottimizzata
     df_aiuti.write_parquet(
