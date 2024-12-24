@@ -1,12 +1,12 @@
 import xmltodict
-import pandas as pd
+import polars as pl
 import argparse
 import sys
 import os
 
 def main():
     # Parse command line arguments
-    parser = argparse.ArgumentParser(description='Convert XML aiuti file to CSV')
+    parser = argparse.ArgumentParser(description='Convert XML aiuti file to Parquet')
     parser.add_argument('input_file', help='Input XML file path')
     args = parser.parse_args()
 
@@ -20,10 +20,10 @@ def main():
     output_dir = os.path.dirname(input_path)
     base_name = os.path.splitext(os.path.basename(input_path))[0]
 
-    # Percorsi completi per i file CSV
-    aiuti_csv = os.path.join(output_dir, f"{base_name}_aiuti.csv")
-    componenti_csv = os.path.join(output_dir, f"{base_name}_componenti.csv")
-    strumenti_csv = os.path.join(output_dir, f"{base_name}_strumenti.csv")
+    # Percorsi completi per i file Parquet
+    aiuti_parquet = os.path.join(output_dir, f"{base_name}_aiuti.parquet")
+    componenti_parquet = os.path.join(output_dir, f"{base_name}_componenti.parquet")
+    strumenti_parquet = os.path.join(output_dir, f"{base_name}_strumenti.parquet")
 
     # Legge il file XML
     with open(input_path, "r", encoding="utf-8") as file:
@@ -63,10 +63,32 @@ def main():
                 strumento["ID_COMPONENTE"] = componente.get("ID_COMPONENTE")
                 strumenti_records.append(strumento)
 
-    # Salva i CSV nella stessa directory del file di input
-    pd.DataFrame(aiuto_records).to_csv(aiuti_csv, index=False)
-    pd.DataFrame(componenti_records).to_csv(componenti_csv, index=False)
-    pd.DataFrame(strumenti_records).to_csv(strumenti_csv, index=False)
+    # Converti liste in DataFrame Polars con processing parallelo
+    df_aiuti = pl.DataFrame(aiuto_records).with_columns(pl.all().cast(pl.Utf8))
+    df_componenti = pl.DataFrame(componenti_records).with_columns(pl.all().cast(pl.Utf8))
+    df_strumenti = pl.DataFrame(strumenti_records).with_columns(pl.all().cast(pl.Utf8))
+
+    # Salva in Parquet con compressione ottimizzata
+    df_aiuti.write_parquet(
+        aiuti_parquet,
+        row_group_size=100000,
+        compression="zstd",
+        use_pyarrow=True
+    )
+
+    df_componenti.write_parquet(
+        componenti_parquet,
+        row_group_size=100000,
+        compression="zstd",
+        use_pyarrow=True
+    )
+
+    df_strumenti.write_parquet(
+        strumenti_parquet,
+        row_group_size=100000,
+        compression="zstd",
+        use_pyarrow=True
+    )
 
 if __name__ == "__main__":
     main()

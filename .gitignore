@@ -1,3 +1,4 @@
 tmp.*
 *Zone.Identifier
 script/tmp/*
+data/aiuti/raw/*.xml
