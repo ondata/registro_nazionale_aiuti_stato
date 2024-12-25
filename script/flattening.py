@@ -11,80 +11,87 @@ def main():
     parser.add_argument('-of', '--output-folder', help='Output folder for parquet files (optional)')
     args = parser.parse_args()
 
-    # Normalizza il path e verifica esistenza file
+    # Normalize path and check file existence
     input_path = os.path.abspath(args.input)
     if not os.path.exists(input_path):
         print(f"Error: File {input_path} not found")
         sys.exit(1)
 
-    # Determina cartella output
+    # Determine output directory
     output_dir = args.output_folder if args.output_folder else os.path.dirname(input_path)
     output_dir = os.path.abspath(output_dir)
 
-    # Crea cartella output se non esiste
+    # Create output directory if it doesn't exist
     os.makedirs(output_dir, exist_ok=True)
 
-    # Genera nomi file output
+    # Generate output file names
     base_name = os.path.splitext(os.path.basename(input_path))[0]
     aiuti_parquet = os.path.join(output_dir, f"{base_name}_aiuti.parquet")
     componenti_parquet = os.path.join(output_dir, f"{base_name}_componenti.parquet")
     strumenti_parquet = os.path.join(output_dir, f"{base_name}_strumenti.parquet")
 
-    # Legge il file XML
+    # Read XML file
     with open(input_path, "r", encoding="utf-8") as file:
         data = xmltodict.parse(file.read())
 
-    # Estrai il contenuto di LISTA_AIUTI
+    # Extract LISTA_AIUTI content
     aiuti = data.get("LISTA_AIUTI", {}).get("AIUTO", [])
 
-    # Tabelle principali
+    # Main tables
     aiuto_records = []
     componenti_records = []
     strumenti_records = []
 
     for aiuto in aiuti:
-        # Tabella AIUTO
+        # AIUTO table
         aiuto_base = {key: aiuto.get(key) for key in aiuto if key != "COMPONENTI_AIUTO"}
         aiuto_records.append(aiuto_base)
 
-        # Tabella COMPONENTI_AIUTO
+        # COMPONENTI_AIUTO table
         componenti_aiuto = aiuto.get("COMPONENTI_AIUTO", {}).get("COMPONENTE_AIUTO", [])
-        if isinstance(componenti_aiuto, dict):  # Gestione singolo componente
+        if isinstance(componenti_aiuto, dict):  # Handle single component case
             componenti_aiuto = [componenti_aiuto]
 
         for componente in componenti_aiuto:
-            # Rimuove STRUMENTI_AIUTO dalla tabella COMPONENTI
+            # Remove STRUMENTI_AIUTO from COMPONENTI table
             componente_record = {key: componente.get(key) for key in componente if key != "STRUMENTI_AIUTO"}
-            componente_record["CAR"] = aiuto.get("CAR")  # Chiave esterna verso AIUTO
+            componente_record["CAR"] = aiuto.get("CAR")  # Foreign key to AIUTO
+            componente_record["COR"] = aiuto.get("COR")  # Foreign key to AIUTO
             componenti_records.append(componente_record)
 
-            # Tabella STRUMENTI_AIUTO
+            # STRUMENTI_AIUTO table
             strumenti_aiuto = componente.get("STRUMENTI_AIUTO", {}).get("STRUMENTO_AIUTO", [])
-            if isinstance(strumenti_aiuto, dict):  # Gestione singolo strumento
+            if isinstance(strumenti_aiuto, dict):  # Handle single instrument case
                 strumenti_aiuto = [strumenti_aiuto]
 
             for strumento in strumenti_aiuto:
-                strumento["CAR"] = aiuto.get("CAR")
-                strumento["ID_COMPONENTE"] = componente.get("ID_COMPONENTE")
+                strumento["ID_COMPONENTE_AIUTO"] = componente.get("ID_COMPONENTE_AIUTO")
                 strumenti_records.append(strumento)
 
-    # Estrai nome file senza estensione per campo source
+    # Extract filename for source field
     source_name = os.path.splitext(os.path.basename(input_path))[0]
 
-    # Converti liste in DataFrame Polars con processing parallelo e aggiungi source
+    # Convert lists to Polars DataFrames and add source
     df_aiuti = (pl.DataFrame(aiuto_records)
-                .with_columns(pl.all().cast(pl.Utf8))
+                .with_columns([
+                    pl.col("DATA_CONCESSIONE").str.strptime(pl.Date, format="%Y-%m-%d", strict=False),
+                    pl.all().exclude("DATA_CONCESSIONE").cast(pl.Utf8)
+                ])
                 .with_columns(pl.lit(source_name).alias("source")))
 
     df_componenti = (pl.DataFrame(componenti_records)
-                    .with_columns(pl.all().cast(pl.Utf8))
-                    .with_columns(pl.lit(source_name).alias("source")))
+                     .with_columns(pl.all().cast(pl.Utf8))
+                     .with_columns(pl.lit(source_name).alias("source")))
 
     df_strumenti = (pl.DataFrame(strumenti_records)
-                   .with_columns(pl.all().cast(pl.Utf8))
-                   .with_columns(pl.lit(source_name).alias("source")))
+                    .with_columns([
+                        pl.col("ELEMENTO_DI_AIUTO").cast(pl.Float64),
+                        pl.col("IMPORTO_NOMINALE").cast(pl.Float64),
+                        pl.all().exclude(["ELEMENTO_DI_AIUTO", "IMPORTO_NOMINALE"]).cast(pl.Utf8)
+                    ])
+                    .with_columns(pl.lit(source_name).alias("source")))
 
-    # Salva in Parquet con compressione ottimizzata
+    # Save to Parquet with optimized compression
     df_aiuti.write_parquet(
         aiuti_parquet,
         row_group_size=100000,
