@@ -1,6 +1,9 @@
 # Intro
 
-## Note sugli XML
+
+## Note
+
+### Note sugli XML
 
 Alcuni file contengono caratteri non consentiti e mandano in errore vari *parser*.
 
@@ -47,3 +50,7 @@ L'elenco dei caratteri invalidi e dei file problematici è questo
 | OpenData_Aiuti_2024_08.xml | \x02 |
 | OpenData_Aiuti_2024_10.xml | \x02 |
 | OpenData_Aiuti_2024_12.xml | \x02 |
+
+### Sui campi con nome utente e codice fiscale
+
+L'[articolo 26 del CAD](https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:decreto.legislativo:2013;033~art26) prevede esplicitamente l'obbligo di pubblicazione degli atti relativi alla concessione di sovvenzioni, contributi, sussidi e altri vantaggi economici da parte delle pubbliche amministrazioni, con l'obiettivo di garantire trasparenza e *accountability*.
