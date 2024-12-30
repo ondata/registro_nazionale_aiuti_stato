@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.rna.it/RNA_misura/schema"
+            xmlns:common="http://www.rna.it/RNA_common/schema"
+            targetNamespace="http://www.rna.it/RNA_misura/schema" elementFormDefault="qualified"
+            >
+            <xsd:import schemaLocation="RNA_common.xsd" namespace="http://www.rna.it/RNA_common/schema"/>
+   <xsd:complexType name="LISTA_MISURE_TYPE">
+        <xsd:sequence>
+            <xsd:element name="MISURA" type="MISURA_TYPE" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="LISTA_MISURE" type="LISTA_MISURE_TYPE"/>
+    <xsd:complexType name="MISURA_TYPE">
+        <xsd:sequence>
+            <xsd:element name="CAR_PADRE" type="xsd:string"/>
+            <xsd:element name="COD_AMM" type="xsd:string"/>
+            <xsd:element name="COD_AUTORITA" type="xsd:string"/>
+            <xsd:element name="DES_AUTORITA" type="xsd:string"/>
+            <xsd:element name="COD_UFF_GESTORE" type="xsd:integer"/>
+            <xsd:element name="DENOMINAZIONE_UFF_GESTORE" type="xsd:string"/>
+            <xsd:element name="COD_CE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="STATO_MEMBRO" type="xsd:string"/>
+            <xsd:element name="CAR" type="xsd:string"/>
+            <xsd:element name="CAR_ATTIVO" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="CAR_PRECEDENTE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="DATA_DECISIONE_CE" type="xsd:dateTime" minOccurs="0"/>
+            <xsd:element name="TITOLO_MISURA" type="xsd:string"/>
+            <xsd:element name="LINK_AIUTO" type="xsd:string"/>
+            <xsd:element name="DATA_INIZIO_MISURA" type="xsd:dateTime"/>
+            <xsd:element name="DATA_FINE_MISURA" type="xsd:dateTime"/>
+            <xsd:element name="COD_TIPO_MISURA" type="xsd:integer"/>
+            <xsd:element name="DES_TIPO_MISURA" type="xsd:string"/>
+            <xsd:element name="DENOMINAZIONE_BENEFICIARIO" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="FLAG_MODIFICA_REGIME_O_ESISTENTE" type="MIS_SI_NO_TYPE"/>
+            <xsd:element name="COD_AIUTO_CE_PREC" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="DATA_CONCESSIONE" type="xsd:dateTime" minOccurs="0"/>
+            <xsd:element name="AUTORITA_CONCEDENTE_TRASP_CE" type="xsd:string"/>
+            <xsd:element name="INDIRIZZO_POSTALE_AUTORITA_CONCEDENTE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="INDIRIZZO_INTERNET_AUTORITA_CONCEDENTE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="COD_TIPO_MODIFICA_MISURA" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="DES_TIPO_MODIFICA_MISURA" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="BASE_GIURIDICA_NAZIONALE" type="xsd:string"/>
+            <xsd:element name="FLAG_QUADRO" type="MIS_SI_NO_TYPE"/>
+            <xsd:element name="DATA_INIZIO_VAL_QUADRO" type="xsd:date" minOccurs="0"/>
+            <xsd:element name="DATA_FINE_VAL_QUADRO" type="xsd:date" minOccurs="0"/>
+            <xsd:element name="LISTA_MISURE_ATTUATIVE" minOccurs="0" type="LISTA_MISURE_ATTUATIVE_TYPE"/>
+            <xsd:element name="LISTA_STATUS_FINALITA_REG" type="LISTA_STATUS_FINALITA_REG_TYPE"/>
+            <xsd:element name="LISTA_SETTORI" type="LISTA_SETTORI_TYPE"/>
+            <xsd:element name="LISTA_AREE" type="LISTA_AREE_TYPE"/>
+            <xsd:element name="LISTA_STRUMENTI" type="LISTA_STRUMENTI_TYPE"/>
+            <xsd:element name="LISTA_DOTAZIONI" type="LISTA_DOTAZIONI_TYPE"/>
+            <xsd:element name="IMPORTO_PRESTITI_GARANTITI" type="xsd:decimal" minOccurs="0"/>
+            <xsd:element name="IMPORTO_AIUTO_AD_HOC" type="xsd:decimal" minOccurs="0"/>
+            <xsd:element name="LISTA_COFINANZIAMENTI" minOccurs="0" type="LISTA_COFINANZIAMENTI_TYPE"/>
+            <xsd:element name="LISTA_OBIETTIVI" type="LISTA_OBIETTIVI_TYPE"/>
+            <xsd:element name="LISTA_TIPO_BENEFICIARIO" type="LISTA_DIM_BENEFICIARIO_TYPE"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LISTA_STATUS_FINALITA_REG_TYPE">
+        <xsd:sequence>
+            <xsd:element name="STATUS_FINALITA_REG" maxOccurs="unbounded" minOccurs="0"
+                         type="STATUS_FINALITA_REG_TYPE"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="STATUS_FINALITA_REG_TYPE">
+        <xsd:sequence>
+            <xsd:element name="COD_STATUS" type="xsd:integer"/>
+            <xsd:element name="DES_STATUS" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LISTA_SETTORI_TYPE">
+        <xsd:sequence>
+            <xsd:element name="SETTORE" maxOccurs="unbounded" minOccurs="0" type="SETTORE_TYPE"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="SETTORE_TYPE">
+        <xsd:sequence>
+            <xsd:element name="COD_SETTORE" type="xsd:string"/>
+            <xsd:element name="DES_SETTORE" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LISTA_DIM_BENEFICIARIO_TYPE">
+        <xsd:sequence>
+            <xsd:element name="DIM_BENEFICIARIO_TYPE" maxOccurs="unbounded" minOccurs="0" type="DIM_BENEFICIARIO_TYPE"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="DIM_BENEFICIARIO_TYPE">
+        <xsd:sequence>
+            <xsd:element name="COD_DIM_BENEFICIARIO" type="xsd:integer"/>
+            <xsd:element name="DESCR_DIM_BENEFICIARIO" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LISTA_AREE_TYPE">
+        <xsd:sequence>
+            <xsd:element name="AREA" type="AREA_TYPE" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="AREA_TYPE">
+        <xsd:sequence>
+            <xsd:element name="COD_AREA" type="xsd:string"/>
+            <xsd:element name="DES_AREA" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LISTA_STRUMENTI_TYPE">
+        <xsd:sequence>
+            <xsd:element name="STRUMENTO" type="STRUMENTO_TYPE" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="STRUMENTO_TYPE">
+        <xsd:sequence>
+            <xsd:element name="FLAG_USER_DEFINED" type="MIS_SI_NO_TYPE"/>
+            <xsd:element name="COD_STRUMENTO" type="xsd:integer"/>
+            <xsd:element name="DES_STRUMENTO" type="xsd:string"/>
+            <xsd:element name="DESCRIZIONE_ALTRO" type="xsd:string" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LISTA_DOTAZIONI_TYPE">
+        <xsd:sequence>
+            <xsd:element name="DOTAZIONE" type="DOTAZIONE_TYPE" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="DOTAZIONE_TYPE">
+        <xsd:sequence>
+            <xsd:element name="ANNO_COMPETENZA" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="IMPORTO" type="xsd:unsignedLong"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LISTA_COFINANZIAMENTI_TYPE">
+        <xsd:sequence>
+            <xsd:element name="COFINANZIAMENTO" type="COFINANZIAMENTO_TYPE" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="COFINANZIAMENTO_TYPE">
+        <xsd:sequence>
+            <xsd:element name="COD_FONDO" type="xsd:integer"/>
+            <xsd:element name="DESCRIZIONE_FONDO" type="xsd:string"/>
+            <xsd:element name="IMPORTO" type="xsd:decimal"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="LISTA_OBIETTIVI_TYPE">
+        <xsd:sequence>
+            <xsd:element name="OBIETTIVO" type="OBIETTIVO_TYPE" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="OBIETTIVO_TYPE">
+        <xsd:sequence>
+            <xsd:element name="COD_PROCEDIMENTO" type="xsd:integer"/>
+            <xsd:element name="DES_PROCEDIMENTO" type="xsd:string"/>
+            <xsd:element name="COD_REGOLAMENTO" type="xsd:string"/>
+            <xsd:element name="DES_REGOLAMENTO" type="xsd:string"/>
+            <xsd:element name="COD_OBIETTIVO" type="xsd:integer"/>
+            <xsd:element name="DES_OBIETTIVO" type="xsd:string"/>
+            <xsd:element name="INTENSITA_MASSIMA" type="xsd:integer"/>
+            <xsd:element name="MAGGIORAZIONE" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="FLAG_VALORE_ASSOLUTO_INTENSITA" type="xsd:string"/>
+            <xsd:element name="FLAG_VALORE_ASSOLUTO_MAGGIORAZIONE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="COD_CALAMITA" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="DES_CALAMITA" type="xsd:string"  minOccurs="0"/>
+            <xsd:element name="DATA_INIZIO_EVENTO" type="xsd:date" minOccurs="0"/>
+            <xsd:element name="DATA_FINE_EVENTO" type="xsd:date" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LISTA_MISURE_ATTUATIVE_TYPE">
+        <xsd:sequence>
+            <xsd:element name="MISURA_ATTUATIVA" maxOccurs="unbounded" type="MISURA_ATTUATIVA_TYPE"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="MISURA_ATTUATIVA_TYPE">
+        <xsd:sequence>
+            <xsd:element name="IDENTIFICATIVO" type="xsd:long"/>
+            <xsd:element name="TITOLO" type="xsd:string"/>
+            <xsd:element name="ENTE_COMPETENTE" type="xsd:string"/>
+            <xsd:element name="BASE_GIURIDICA_NAZIONALE" type="xsd:string"/>
+            <xsd:element name="DATA_INIZIO_VALIDITA" type="xsd:date"/>
+            <xsd:element name="DATA_FINE_VALIDITA" type="xsd:date"/>
+            <xsd:element name="LINK_TRASPARENZA" type="xsd:string"/>
+            <xsd:element name="SOGGETTO_CONCEDENTE" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:simpleType name="MIS_SI_NO_TYPE">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="SI"/>
+            <xsd:enumeration value="NO"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+</xsd:schema>

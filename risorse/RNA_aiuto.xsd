@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.rna.it/RNA_aiuto/schema"
+            targetNamespace="http://www.rna.it/RNA_aiuto/schema" elementFormDefault="qualified">
+   <xsd:complexType name="LISTA_AIUTI_TYPE">
+        <xsd:sequence>
+            <xsd:element name="AIUTO" type="AIUTO_TYPE" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:element name="LISTA_AIUTI" type="LISTA_AIUTI_TYPE"/>
+    <xsd:complexType name="AIUTO_TYPE">
+        <xsd:sequence>
+            <xsd:element name="CAR" type="xsd:string"/>
+            <xsd:element name="TITOLO_MISURA" type="xsd:string"/>
+            <xsd:element name="DES_TIPO_MISURA" type="xsd:string"/>
+            <xsd:element name="COD_CE_MISURA" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="BASE_GIURIDICA_NAZIONALE" type="xsd:string"/>
+            <xsd:element name="LINK_TESTO_INTEGRALE_MISURA" type="xsd:string"/>
+            <xsd:element name="IDENTIFICATIVO_UFFICIO" type="xsd:integer"/>
+            <xsd:element name="SOGGETTO_CONCEDENTE" type="xsd:string"/>
+            <xsd:element name="COR" type="xsd:integer"/>
+            <xsd:element name="TITOLO_PROGETTO" type="xsd:string"/>
+            <xsd:element name="DESCRIZIONE_PROGETTO" type="xsd:string"/>
+            <xsd:element name="LINK_TRASPARENZA_NAZIONALE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="DATA_CONCESSIONE" type="xsd:date"/>
+            <xsd:element name="CUP" type="xsd:string"/>
+            <xsd:element name="ATTO_CONCESSIONE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="LINK_ATTO_CONCESSIONE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="DENOMINAZIONE_BENEFICIARIO" type="xsd:string"/>
+            <xsd:element name="CODICE_FISCALE_BENEFICIARIO" type="xsd:string"/>
+            <xsd:element name="DES_TIPO_BENEFICIARIO" type="xsd:string"/>
+            <xsd:element name="REGIONE_BENEFICIARIO" type="xsd:string"/>
+            <xsd:element name="IDENTIFICATIVO_MISURA_ATTUATIVA" type="xsd:integer" minOccurs="0"/>
+            <xsd:element name="MISURA_ATTUATIVA_ENTE_COMPETENTE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="MISURA_ATTUATIVA_TITOLO" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="MISURA_ATTUATIVA_BASE_GIURIDICA_NAZIONALE" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="COMPONENTI_AIUTO" type="LISTA_COMPONENTI_AIUTO_TYPE" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LISTA_COMPONENTI_AIUTO_TYPE">
+        <xsd:sequence>
+            <xsd:element name="COMPONENTE_AIUTO" type="COMPONENTE_AIUTO_TYPE" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="COMPONENTE_AIUTO_TYPE">
+        <xsd:sequence>
+             <xsd:element name="ID_COMPONENTE_AIUTO" type="xsd:integer" />
+            <xsd:element name="COD_PROCEDIMENTO" type="xsd:integer" />
+            <xsd:element name="DES_PROCEDIMENTO" type="xsd:string" />
+            <xsd:element name="COD_REGOLAMENTO" type="xsd:string" />
+            <xsd:element name="DES_REGOLAMENTO" type="xsd:string" />
+            <xsd:element name="COD_OBIETTIVO" type="xsd:string" />
+            <xsd:element name="DES_OBIETTIVO" type="xsd:string" />
+            <xsd:element name="SOGGETTO_INTERMEDIARIO" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="ENTITA_DELEGATA" type="xsd:string" minOccurs="0"/>
+            <xsd:element name="SETTORE_ATTIVITA" type="xsd:string" />
+            <xsd:element name="STRUMENTI_AIUTO" type="LISTA_STRUMENTO_AIUTO_TYPE" />
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="LISTA_STRUMENTO_AIUTO_TYPE">
+        <xsd:sequence>
+            <xsd:element name="STRUMENTO_AIUTO" type="STRUMENTO_AIUTO_TYPE" maxOccurs="unbounded" minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="STRUMENTO_AIUTO_TYPE">
+        <xsd:sequence>
+            <xsd:element name="COD_STRUMENTO" type="xsd:integer" />
+            <xsd:element name="DES_STRUMENTO" type="xsd:string" />
+            <xsd:element name="ELEMENTO_DI_AIUTO" type="xsd:decimal" />
+            <xsd:element name="IMPORTO_NOMINALE" type="xsd:decimal"/>
+        </xsd:sequence>
+    </xsd:complexType>
+</xsd:schema>
