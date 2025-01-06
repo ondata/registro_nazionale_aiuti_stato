@@ -3,3 +3,5 @@ tmp.*
 script/tmp/*
 data/aiuti/raw/*.xml
 data/misure/parquet/*.parquet
+publishing/.quarto/
+
