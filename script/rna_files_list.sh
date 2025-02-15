@@ -62,6 +62,9 @@ mlr -I --jsonl cut -x -f span then rename -r "@","" then rename -g -r "[-]","_" 
 
 cp "${folder}"/tmp/aiuti.jsonl "${folder}"/../data/aiuti/aiuti.jsonl
 
+# ordina per id
+mlr -I --jsonl sort -tr data_nid "${folder}"/../data/aiuti/aiuti.jsonl
+
 ## estrai elenco URL
 
 if [ -f "${folder}"/tmp/lista.jsonl ]; then
@@ -81,6 +84,9 @@ while read -r line; do
 done <"${folder}"/tmp/aiuti.jsonl
 
 cp "${folder}"/tmp/lista.jsonl "${folder}"/../data/aiuti/lista.jsonl
+
+# ordina per id
+mlr -I --jsonl sort -tr file "${folder}"/../data/aiuti/aiuti.jsonl
 
 ## scarica dati grezzi
 
