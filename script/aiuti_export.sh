@@ -25,7 +25,7 @@ find ../data/aiuti/raw -name "*.zip" | while read zip_file; do
     echo "lo creo"
 
     # estrai file xml
-    unzip -p "$zip_file" | sed "s/\x02/ /g;s/\x10/ /g;s/\x1A/'/g" >"${folder}"/tmp/"$name".xml
+    unzip -p "$zip_file" | sed "s/[\x00-\x08\x0B\x0C\x0E-\x1F]/ /g;s/\x02/ /g;s/\x10/ /g;s/\x1A/'/g" >"${folder}"/tmp/"$name".xml
 
     # fai il flattening dell'xml in aiuti, componenti e strumenti
     python3 flattening.py -i "${folder}"/tmp/"$name".xml -of "${folder}"/../data/aiuti/parquet
