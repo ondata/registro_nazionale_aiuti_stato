@@ -5,3 +5,5 @@ data/aiuti/raw/*.xml
 data/misure/parquet/*.parquet
 publishing/.quarto/
 
+.aider*
+docs/*
